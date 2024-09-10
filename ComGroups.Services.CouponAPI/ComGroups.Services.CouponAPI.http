@@ -1,0 +1,6 @@
+@ComGroups.Services.CouponAPI_HostAddress = http://localhost:5198
+
+GET {{ComGroups.Services.CouponAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

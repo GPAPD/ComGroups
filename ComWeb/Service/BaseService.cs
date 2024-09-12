@@ -22,7 +22,7 @@ namespace ComWeb.Service
 			{
 				HttpClient httpClient = _httpClientFactory.CreateClient("ComGroup");
 				HttpRequestMessage message = new();
-				message.Headers.Add("Content-Type", "application/json");
+				message.Headers.Add("Accsepts", "application/json");
 				//token
 				message.RequestUri = new Uri(requestDto.Url);
 				if (requestDto.Data != null)

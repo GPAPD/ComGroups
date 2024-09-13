@@ -129,7 +129,8 @@ namespace ComGroups.Services.CouponAPI.Controllers
 		}
 
 		[HttpDelete]
-		public ResponseDto Delete(int Id)
+        [Route("{Id:int}")]
+        public ResponseDto Delete(int Id)
 		{
 			try
 			{

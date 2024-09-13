@@ -1,0 +1,6 @@
+@ComGroups.Services.AuthAPI_HostAddress = http://localhost:5227
+
+GET {{ComGroups.Services.AuthAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

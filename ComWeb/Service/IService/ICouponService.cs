@@ -9,6 +9,6 @@ namespace ComWeb.Service.IService
 		Task<ResponesDto?> GetCouponByIdAsync(int id);
 		Task<ResponesDto?> CreateCouponAsync(CouponDto couponDto);
 		Task<ResponesDto?> UpdateCouponAsync(CouponDto couponDto);
-		Task<ResponesDto?> DeleteCouponAsyncAsync(int id);
+		Task<ResponesDto?> DeleteCouponAsync(int id);
 	}
 }

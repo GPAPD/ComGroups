@@ -21,12 +21,12 @@ namespace ComWeb.Service
 			});
 		}
 
-		public async Task<ResponesDto?> DeleteCouponAsyncAsync(int id)
+		public async Task<ResponesDto?> DeleteCouponAsync(int id)
 		{
 			return await _baseService.SendAsync(new RequestDto()
 			{
 				ApiType = SD.ApiType.DELETE,
-				Url = SD.CouponAPIBase + "/api/coupon/" + id
+				Url = SD.CouponAPIBase + "/api/coupon/"+ id
 			}); ;
 		}
 

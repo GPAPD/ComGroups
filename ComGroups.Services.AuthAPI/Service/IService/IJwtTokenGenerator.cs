@@ -1,0 +1,9 @@
+﻿using ComGroups.Services.AuthAPI.Model;
+
+namespace ComGroups.Services.AuthAPI.Service.IService
+{
+    public interface IJwtTokenGenerator
+    {
+        string GenerateToken(ApplicationUser applicationUser);
+    }
+}

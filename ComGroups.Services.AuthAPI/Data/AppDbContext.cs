@@ -1,14 +1,18 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using ComGroups.Services.AuthAPI.Model;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace ComGroups.Services.AuthAPI.Data
 {
-    public class AppDbContext : IdentityDbContext
+    public class AppDbContext : IdentityDbContext<ApplicationUser>
 	{
 		public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) 
 		{
 		
 		}
+
+		public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{

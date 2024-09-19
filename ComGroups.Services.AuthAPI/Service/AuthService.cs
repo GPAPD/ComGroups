@@ -46,7 +46,8 @@ namespace ComGroups.Services.AuthAPI.Service
             {
                 return new LogInResponceDto() {User = null, Token="" };
             }
-            var Token = _jwtTokenGenerator.GenerateToken(user);
+            var roles = await _userManager.GetRolesAsync(user);
+            var Token = _jwtTokenGenerator.GenerateToken(user,roles);
             UserDto userDto = new() 
             {
                 Id = user.Id,

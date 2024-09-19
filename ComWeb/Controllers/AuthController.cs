@@ -1,17 +1,24 @@
 ﻿using ComWeb.Models;
 using ComWeb.Service.IService;
 using ComWeb.Utility;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Newtonsoft.Json;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace ComWeb.Controllers
 {
     public class AuthController : Controller
     {
         private readonly IAuthService _authService;
-        public AuthController(IAuthService authService) 
+        private readonly ITokenProvider _tokenProvider;
+        public AuthController(IAuthService authService, ITokenProvider tokenProvider)
         {
             _authService = authService;
+            _tokenProvider = tokenProvider;
         }
 
         [HttpGet]
@@ -20,6 +27,32 @@ namespace ComWeb.Controllers
             LogInRequestDto logInRequestDto = new LogInRequestDto();
 
             return View(logInRequestDto);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> Login(LogInRequestDto obj)
+        {
+            ResponesDto respose = await _authService.LoginAsync(obj);
+
+            if (respose != null && respose.IsSuccess)
+            {
+                LogInResponceDto logInResponceDto = 
+                    JsonConvert.DeserializeObject<LogInResponceDto>(Convert.ToString(respose.Result));
+
+                if (logInResponceDto != null && logInResponceDto.Token != null) 
+                {
+                    await SignInUser(logInResponceDto);
+                    _tokenProvider.SetToken(logInResponceDto.Token);
+                }
+                return RedirectToAction("Index", "Home");
+            }
+            else if (respose != null && !respose.IsSuccess)
+            {
+                ModelState.AddModelError("CustomError", respose.Message);
+
+            }
+
+            return View(obj);
         }
 
         [HttpGet]
@@ -73,10 +106,31 @@ namespace ComWeb.Controllers
 
 
 
-        public ActionResult LogOut()
+        public async Task<ActionResult> LogOut()
         {
+            await HttpContext.SignOutAsync();
+            _tokenProvider.DeleteToken();
 
-            return View();
+            return RedirectToAction("Index","Home");
+        }
+
+        private async Task SignInUser(LogInResponceDto model) 
+        {
+            var handler = new JwtSecurityTokenHandler();
+
+            var jwt = handler.ReadJwtToken(model.Token);
+
+            var identity = new ClaimsIdentity(CookieAuthenticationDefaults.AuthenticationScheme);
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Email, jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Sub, jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Sub).Value));
+            identity.AddClaim(new Claim(JwtRegisteredClaimNames.Name, jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Name).Value));
+
+            identity.AddClaim(new Claim(ClaimTypes.Name, jwt.Claims.FirstOrDefault(u => u.Type == JwtRegisteredClaimNames.Email).Value));
+            identity.AddClaim(new Claim(ClaimTypes.Role, jwt.Claims.FirstOrDefault(u => u.Type == "role").Value));
+
+            var principal = new ClaimsPrincipal(identity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
         }
     }
 }

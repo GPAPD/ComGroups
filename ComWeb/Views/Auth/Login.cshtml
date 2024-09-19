@@ -1,6 +1,6 @@
 ﻿@model LogInRequestDto
 
-<form methord="post">
+<form asp-action="Login" methord="post">
     <div class="container border p-4">
         <div class="row text-center">
             <h1>Login</h1>
@@ -11,9 +11,11 @@
         <div class="row">
             <div class="col-12 col-md-6 offset-md-3 pb-3">
                 <input asp-for="Email" class="form-control" placeholder="Email" />
+                <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="col-12 col-md-6 offset-md-3 pb-3">
-                <input asp-for="Email" class="form-control" placeholder="Email" />
+                <input asp-for="Password" class="form-control" placeholder="Password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="col-12 col-md-6 offset-md-3 pb-3">
                 <button type="submit" class="form-control btn btn-success" value="Submit">Login</button>
@@ -23,3 +25,9 @@
     </div>
 
 </form>
+
+
+@section Scripts
+{
+    <partial name="_ValidationScriptsPartial" />
+}

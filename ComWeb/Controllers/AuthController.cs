@@ -28,12 +28,49 @@ namespace ComWeb.Controllers
             var rolelist = new List<SelectListItem>
             {
                 new SelectListItem{Text=SD.RoleAdmin,Value = SD.RoleAdmin},
-                new SelectListItem{Text=SD.Customer,Value = SD.Customer}
+                new SelectListItem{Text=SD.RoleCustomer,Value = SD.RoleCustomer}
             };
             ViewBag.rolelist = rolelist;
 
             return View();
         }
+        [HttpPost]
+        public async  Task<ActionResult> Register(RegistrationDto obj)
+        {
+            ResponesDto respose = await _authService.RegisterAsync(obj);
+            ResponesDto assignRole;
+
+            if (respose != null && respose.IsSuccess)
+            {
+                if (string.IsNullOrEmpty(obj.Role))
+                {
+                    obj.Role = SD.RoleCustomer;
+
+                }
+
+                assignRole = await _authService.AssignRoleAsync(obj);
+
+                if (assignRole.IsSuccess)
+                {
+                    TempData["success"] = "Registration Successful";
+                    return RedirectToAction(nameof(Login));
+                }
+            }
+            else if (respose != null && !respose.IsSuccess)
+            { 
+                TempData["error"] = $"Registration Fail {respose.Message}";
+            
+            }
+            var rolelist = new List<SelectListItem>
+            {
+                new SelectListItem{Text=SD.RoleAdmin,Value = SD.RoleAdmin},
+                new SelectListItem{Text=SD.RoleCustomer,Value = SD.RoleCustomer}
+            };
+            ViewBag.rolelist = rolelist;
+
+            return View(obj);
+        }
+
 
 
         public ActionResult LogOut()

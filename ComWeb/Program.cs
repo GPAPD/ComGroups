@@ -23,6 +23,8 @@ builder.Services.AddScoped<ITokenProvider, TokenProvider>();
 builder.Services.AddScoped<IBaseService, BaseService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+
+//Save Cookie
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
 	.AddCookie(options => 
 	{	

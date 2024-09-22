@@ -31,7 +31,7 @@ namespace ComWeb.Service
                 ApiType = SD.ApiType.POST,
                 Data = logInRequestDto,
                 Url = SD.AuthAPIBase + "/api/auth/login"
-            }); 
+            }, withBearer: false); 
         }
 
         public async Task<ResponesDto> RegisterAsync(RegistrationDto registrationDto)
@@ -41,7 +41,7 @@ namespace ComWeb.Service
                 ApiType = SD.ApiType.POST,
                 Data = registrationDto,
                 Url = SD.AuthAPIBase + "/api/auth/register"
-            });
+            }, withBearer: false);
         }
     }
 }

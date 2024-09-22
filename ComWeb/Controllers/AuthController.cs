@@ -82,7 +82,6 @@ namespace ComWeb.Controllers
                 }
 
                 assignRole = await _authService.AssignRoleAsync(obj);
-
                 if (assignRole.IsSuccess)
                 {
                     TempData["success"] = "Registration Successful";

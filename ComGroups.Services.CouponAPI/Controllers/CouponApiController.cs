@@ -50,7 +50,7 @@ namespace ComGroups.Services.CouponAPI.Controllers
 			try
 			{
 				Coupon obj = _db.Coupons.First(a => a.CouponId == Id);
-				_mapper.Map<CouponDto>(obj);
+				//_mapper.Map<CouponDto>(obj);
 				_responseDto.Result = _mapper.Map<CouponDto>(obj);
 				_responseDto.IsSuccess = true;
 			}

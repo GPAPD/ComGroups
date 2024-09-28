@@ -1,3 +1,5 @@
+using AutoMapper;
+using ComGroups.Services.ProductAPI;
 using ComGroups.Services.ProductAPI.Data;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,6 +10,10 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlServer(DbVal);
 });
+
+IMapper mapper = MappingConfig.RegisterMaps().CreateMapper();
+builder.Services.AddSingleton(mapper);
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 // Add services to the container.
 
@@ -30,5 +36,19 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
-
+ApplyMigrations();
 app.Run();
+
+//Apply Pending Migrations
+void ApplyMigrations() 
+{
+    using (var scope = app.Services.CreateScope()) 
+    {
+        var _db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+        if (_db.Database.GetPendingMigrations().Count()>0) 
+        {
+            _db.Database.Migrate();
+        }   
+    }
+}

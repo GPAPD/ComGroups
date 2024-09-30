@@ -93,7 +93,32 @@ namespace ComGroup.Services.ProductAPI.Controllers
             try
             {
                 var obj = _mapper.Map<Product>(product);
-                _db.Products.Add(obj);
+                _db.Products.Update(obj);
+                _db.SaveChanges();
+
+                _responseDto.IsSuccess = true;
+                _responseDto.Result = _mapper.Map<ProductDto>(obj);
+
+            }
+            catch (Exception ex)
+            {
+                _responseDto.IsSuccess = false;
+                _responseDto.Message = ex.Message;
+            }
+
+            return _responseDto;
+
+        }
+
+
+        [HttpDelete]
+        [Route("{Id:int}")]
+        public ResponseDto Delete(int Id)
+        {
+            try
+            {
+                Product obj = _db.Products.FirstOrDefault(a => a.ProductId == Id);
+                _db.Products.Remove(obj);
                 _db.SaveChanges();
 
                 _responseDto.IsSuccess = true;

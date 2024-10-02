@@ -1,33 +1,62 @@
 ﻿using ComWeb.Models;
 using ComWeb.Service.IService;
+using ComWeb.Utility;
 
 namespace ComWeb.Service
 {
     public class ProductService : IProductService
     {
-        public Task<ResponesDto?> CreateProductAsync()
+        private readonly IBaseService _baseService;
+
+        public ProductService(IBaseService baseService)
         {
-            throw new NotImplementedException();
+            _baseService = baseService;
+        }
+        public async Task<ResponesDto?> CreateProductAsync(ProductDto product)
+        {
+            return await _baseService.SendAsync(new RequestDto
+            {
+                ApiType = SD.ApiType.POST,
+                Data = product,
+                Url = SD.ProductAPIBase + "/api/product"
+            });
         }
 
-        public Task<ResponesDto?> DeleteProductAsync(int Id)
+        public async Task<ResponesDto?> DeleteProductAsync(int Id)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto
+            {
+                ApiType = SD.ApiType.DELETE,
+                Url = SD.ProductAPIBase + "/api/product/"+ Id
+            });
         }
 
-        public Task<ResponesDto?> GetAllProdoctsAsync()
+        public async Task<ResponesDto?> GetAllProdoctsAsync()
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto
+            {
+                ApiType = SD.ApiType.GET,
+                Url = SD.ProductAPIBase + "/api/product/"
+            });
         }
 
-        public Task<ResponesDto?> GetProdoctByIdAsync(int Id)
+        public async Task<ResponesDto?> GetProdoctByIdAsync(int Id)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto
+            {
+                ApiType = SD.ApiType.GET,
+                Url = SD.ProductAPIBase + "/api/product/" + Id
+            });
         }
 
-        public Task<ResponesDto?> UpdateProductAsync()
+        public async Task<ResponesDto?> UpdateProductAsync(ProductDto product)
         {
-            throw new NotImplementedException();
+            return await _baseService.SendAsync(new RequestDto
+            {
+                ApiType = SD.ApiType.PUT,
+                Data = product,
+                Url = SD.ProductAPIBase + "/api/product/"
+            });
         }
     }
 }

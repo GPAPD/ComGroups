@@ -21,15 +21,20 @@ namespace ComWeb.Controllers
             if (dto != null && dto.IsSuccess == true) 
             {
                 productList = JsonConvert.DeserializeObject<List<ProductDto>>(Convert.ToString(dto.Result));
-            
             }
             else 
             {
-            
-            }
+				TempData["error"] = dto?.Message; 
+			}
 
 
             return View(productList);
+        }
+
+        public IActionResult ProductCreate() 
+        {
+
+            return View();
         }
     }
 }
